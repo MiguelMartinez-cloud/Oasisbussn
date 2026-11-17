@@ -1,20 +1,146 @@
-# OASIS · Inversión del local
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OASIS · Inversión del local</title>
+<style>
+:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#05060d;--card:#0e1020;--line:#23264a;--tx:#eef0ff;--mut:#8f94c4;--blue:#2f7bff;--fu:#ff2bd6;--grn:#2dffb0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(900px 500px at 90% -10%,#ff2bd633,transparent),radial-gradient(900px 500px at -10% 10%,#2f7bff33,transparent),var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:16px}
+h1{margin:0;font-size:1.6rem;letter-spacing:.5px}
+h1 span{background:linear-gradient(90deg,var(--blue),var(--fu));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mut);margin:4px 0 16px;font-size:.9rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+.k small{color:var(--mut);display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:1px}
+.k b{font-size:1.2rem;display:block;margin-top:4px}
+.k.best{border-color:var(--grn);box-shadow:0 0 18px #2dffb033}
+.k.cap{border-color:var(--fu);box-shadow:0 0 18px #ff2bd644}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px}
+.panel h2{margin:0 0 10px;font-size:1rem;color:var(--mut);text-transform:uppercase;letter-spacing:1px}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:680px}
+th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;font-size:.9rem}
+th{color:var(--mut);font-size:.75rem;text-transform:uppercase;letter-spacing:1px}
+th.m{color:var(--blue)}th.a{color:var(--fu)}th.v{color:#b78cff}th.b{color:var(--grn)}
+input{background:#070815;border:1px solid var(--line);color:var(--tx);border-radius:8px;padding:8px;width:100%;font-size:.9rem}
+input:focus{outline:none;border-color:var(--fu);box-shadow:0 0 0 2px #ff2bd655}
+td.best{color:var(--grn);font-weight:700;white-space:nowrap}
+td.best i{font-style:normal;color:var(--mut);font-weight:400;font-size:.75rem;margin-left:4px}
+tfoot td{font-weight:700;border-top:2px solid var(--line)}
+.low{background:#2dffb01f}
+button{border:0;border-radius:10px;padding:9px 14px;color:#fff;font-weight:700;cursor:pointer;background:linear-gradient(90deg,var(--blue),var(--fu))}
+button.g{background:#15183a;border:1px solid var(--line)}
+button.x{background:none;color:var(--mut);padding:4px 8px;font-size:1rem}
+button:hover{filter:brightness(1.2)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.bar input{flex:1;min-width:140px}
+.row{display:grid;grid-template-columns:110px 1fr 90px;gap:8px;align-items:center;margin:6px 0;font-size:.85rem}
+.trk{background:#070815;border-radius:8px;height:16px;overflow:hidden}
+.fill{height:100%;border-radius:8px;transition:width .4s}
+.stack .trk{height:8px;margin:2px 0}
+.leg{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--mut);margin-bottom:8px}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+textarea{width:100%;height:80px;background:#070815;color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:8px;margin-top:8px}
+</style>
+</head>
+<body>
+<h1>OASIS <span>· Inversión del local</span></h1>
+<p class="sub">Llena tu cotización, compara y descubre el capital real para arrancar.</p>
 
-Llena tu cotización, compara y descubre el capital real para arrancar.
+<div class="grid" id="kpis"></div>
 
-## Cotizaciones
+<div class="panel">
+<h2>Cotizaciones</h2>
+<div class="wrap"><table>
+<thead><tr><th>Detalle del producto</th><th class="m">Cotización Miguel</th><th class="a">Cotización Ángel</th><th class="v">Cotización Víctor</th><th class="b">Mejor opción</th><th></th></tr></thead>
+<tbody id="tb"></tbody>
+<tfoot id="tf"></tfoot>
+</table></div>
+<div class="bar">
+<input id="nn" placeholder="Agregar otro ítem (ej. Licuadoras)">
+<button onclick="addItem()">+ Agregar</button>
+<button class="g" onclick="resetAll()">Borrar precios</button>
+</div>
+</div>
 
-| Detalle del producto | Cotización Miguel | Cotización Ángel | Cotización Víctor | Mejor opción |  |
-| --- | --- | --- | --- | --- | --- |
+<div class="panel">
+<h2>Capital por cotización</h2>
+<div id="ch1"></div>
+<label class="sub" style="display:block;margin-top:12px">Imprevistos / reserva (%)</label>
+<input id="cont" type="number" min="0" max="100" value="0" style="max-width:120px">
+</div>
 
-## Capital por cotización
+<div class="panel">
+<h2>Comparativo por ítem</h2>
+<div class="leg"><span><i style="background:var(--blue)"></i>Miguel</span><span><i style="background:var(--fu)"></i>Ángel</span><span><i style="background:#b78cff"></i>Víctor</span></div>
+<div id="ch2" class="stack"></div>
+</div>
 
-Imprevistos / reserva (%)
+<div class="panel">
+<h2>Compartir datos</h2>
+<p class="sub" style="margin:0 0 8px">Cada quien llena su columna y se pasan el código por WhatsApp para juntar todo.</p>
+<button class="g" onclick="exp()">Generar código</button>
+<button class="g" onclick="imp()">Cargar código</button>
+<textarea id="code" placeholder="Código de datos"></textarea>
+</div>
 
-## Comparativo por ítem
-
-MiguelÁngelVíctor
-
-## Compartir datos
-
-Cada quien llena su columna y se pasan el código por WhatsApp para juntar todo.
+<script>
+var P=["m","a","v"],NM={m:"Miguel",a:"Ángel",v:"Víctor"},CL={m:"#2f7bff",a:"#ff2bd6",v:"#b78cff"};
+var DEF=["Máquina","Insumos","Vasos","Pitillos","Nevera","Aire acondicionado","Cámaras","Stickers","Sonido","Útiles de aseo","Barra","Dulces","Muebles (sillas, mesas)","Decoración","Arriendo (5 meses)","Servicios","Personal"];
+var S={items:DEF.map(function(n){return{n:n,m:0,a:0,v:0}}),c:0};
+try{var sv=localStorage.getItem("oasis_inv");if(sv)S=JSON.parse(sv)}catch(e){}
+function $(i){return document.getElementById(i)}
+function f(n){return "$"+Math.round(n).toLocaleString("es-CO")}
+function save(){try{localStorage.setItem("oasis_inv",JSON.stringify(S))}catch(e){}}
+function best(it){var b=null,w="";P.forEach(function(p){var v=+it[p];if(v>0&&(b===null||v<b)){b=v;w=NM[p]}});return{v:b||0,w:w}}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
+function render(){
+ var h="";
+ S.items.forEach(function(it,i){
+  h+='<tr><td><input value="'+esc(it.n)+'" oninput="S.items['+i+'].n=this.value;upd()"></td>';
+  P.forEach(function(p){h+='<td><input inputmode="numeric" placeholder="0" value="'+(it[p]?it[p].toLocaleString("es-CO"):"")+'" oninput="setv('+i+',\''+p+'\',this)"></td>'});
+  h+='<td class="best" id="b'+i+'"></td><td><button class="x" onclick="del('+i+')" title="Eliminar">✕</button></td></tr>';
+ });
+ $("tb").innerHTML=h;upd();
+}
+function setv(i,p,el){var n=parseInt(el.value.replace(/\D/g,""))||0;S.items[i][p]=n;el.value=n?n.toLocaleString("es-CO"):"";upd()}
+function upd(){
+ var t={m:0,a:0,v:0},bt=0,mx=1;
+ S.items.forEach(function(it,i){
+  var b=best(it);bt+=b.v;
+  P.forEach(function(p){t[p]+=+it[p]||0;if(it[p]>mx)mx=it[p]});
+  var c=$("b"+i);if(c)c.innerHTML=b.v?f(b.v)+"<i>"+b.w+"</i>":"—";
+  var tr=$("tb").rows[i];
+  if(tr)P.forEach(function(p,k){tr.cells[k+1].className=(b.v&&+it[p]===b.v)?"low":""});
+ });
+ var cap=bt*(1+(+S.c||0)/100);
+ var low=Math.min.apply(null,P.map(function(p){return t[p]||Infinity}));
+ var sav=isFinite(low)?Math.max(0,low-bt):0;
+ $("tf").innerHTML='<tr><td>TOTAL</td><td>'+f(t.m)+'</td><td>'+f(t.a)+'</td><td>'+f(t.v)+'</td><td class="best">'+f(bt)+'</td><td></td></tr>';
+ $("kpis").innerHTML=
+  P.map(function(p){return '<div class="k"><small>Total '+NM[p]+'</small><b style="color:'+CL[p]+'">'+f(t[p])+'</b></div>'}).join("")+
+  '<div class="k best"><small>Combinando lo mejor</small><b>'+f(bt)+'</b></div>'+
+  '<div class="k"><small>Ahorro vs. cotización más barata</small><b>'+f(sav)+'</b></div>'+
+  '<div class="k cap"><small>Capital real a iniciar</small><b>'+f(cap)+'</b></div>';
+ var tot=[["Miguel",t.m,CL.m],["Ángel",t.a,CL.a],["Víctor",t.v,CL.v],["Mejor combinación",bt,"#2dffb0"]],M=Math.max.apply(null,tot.map(function(x){return x[1]}))||1;
+ $("ch1").innerHTML=tot.map(function(x){return '<div class="row"><span>'+x[0]+'</span><div class="trk"><div class="fill" style="width:'+(x[1]/M*100)+'%;background:'+x[2]+'"></div></div><b>'+f(x[1])+'</b></div>'}).join("");
+ $("ch2").innerHTML=S.items.map(function(it){
+  return '<div class="row"><span>'+esc(it.n)+'</span><div>'+P.map(function(p){return '<div class="trk"><div class="fill" style="width:'+((+it[p]||0)/mx*100)+'%;background:'+CL[p]+'"></div></div>'}).join("")+'</div><b>'+(best(it).v?f(best(it).v):"—")+'</b></div>';
+ }).join("");
+ $("cont").value=S.c;save();
+}
+function addItem(){var v=$("nn").value.trim();if(!v)return;S.items.push({n:v,m:0,a:0,v:0});$("nn").value="";render()}
+function del(i){if(confirm("¿Eliminar «"+S.items[i].n+"»?")){S.items.splice(i,1);render()}}
+function resetAll(){if(confirm("¿Borrar todos los precios?")){S.items.forEach(function(it){it.m=it.a=it.v=0});render()}}
+$("cont").oninput=function(){S.c=+this.value||0;upd()};
+$("nn").onkeydown=function(e){if(e.key==="Enter")addItem()};
+function exp(){$("code").value=btoa(unescape(encodeURIComponent(JSON.stringify(S))))}
+function imp(){try{var d=JSON.parse(decodeURIComponent(escape(atob($("code").value.trim()))));if(d&&d.items){S=d;render()}}catch(e){alert("Código no válido")}}
+render();
+</script>
+</body>
+</html>
